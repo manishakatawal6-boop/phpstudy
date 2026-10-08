@@ -1,0 +1,38 @@
+services:
+  # MySQL を動かすコンテナ
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: laravel
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: password
+      TZ: Asia/Tokyo
+    ports:
+      - "3306:3306" # XAMPP の MySQL と同じ番号なので、XAMPP は止めておく
+    volumes:
+      - mysql-data:/var/lib/mysql # データはここに保存され、コンテナを消しても残る
+    networks:
+      - practice
+
+  # データベースをブラウザで確認するための phpMyAdmin
+  phpmyadmin:
+    image: phpmyadmin:5
+    ports:
+      - "8080:80" # http://localhost:8080
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: root
+      PMA_PASSWORD: root
+    depends_on:
+      - mysql
+    networks:
+      - practice
+
+volumes:
+  mysql-data:
+
+# laravel コンテナとつなぐためのネットワーク（こちらで作る）
+networks:
+  practice:
+    name: practice-network

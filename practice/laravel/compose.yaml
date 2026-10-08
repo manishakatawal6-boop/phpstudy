@@ -1,0 +1,16 @@
+services:
+  # Laravel（PHP）を動かすコンテナ
+  laravel:
+    build: .
+    ports:
+      - "8000:8000" # http://localhost:8000
+    volumes:
+      - ./src:/var/www/html # src フォルダが Laravel のプロジェクトになる
+    networks:
+      - practice
+
+# mysql フォルダで作ったネットワークを使う（先に mysql を起動しておく）
+networks:
+  practice:
+    name: practice-network
+    external: true
